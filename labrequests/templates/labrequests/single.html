@@ -1,0 +1,173 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block css %}
+    {% include 'partials/css.html' %}
+{% endblock css %}
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" />
+{% endblock extra_css %}
+{% block contents %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="uk-grid uk-grid-divider" data-uk-grid="">
+                        <div class="uk-width-3-4@l uk-first-column">
+                            <div class="uk-flex uk-flex-wrap" data-uk-margin="">
+                                <button class="btn btn-outline-primary waves-effect waves-light uk-margin-small-right uk-first-column">
+                                    <i class="mdi mdi-pencil-outline uk-margin-small-right md-color-black"></i>
+                                    Edit
+                                </button>
+                                <div class="btn-group uk-margin-small-right uk-visible@s">
+                                    <button class="btn btn-outline-danger waves-effect waves-light ">
+                                        Delete
+                                    </button>
+                                    {% if lab.state == "active" %}
+                                    <button class="btn btn-outline-warning waves-effect waves-light ">
+                                        Hibernate
+                                    </button>
+                                    {% elif lab.state == "hibernating" %}
+                                    <button class="btn btn-outline-success waves-effect waves-light ">
+                                        Start
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                {% if lab.state == "pending" %}
+                                <button class="btn btn-outline-success waves-effect waves-light ">
+                                    Approve
+                                </button>
+                                {% endif %}
+                            </div>
+                            <hr>
+                            <section>
+                                <span class="sc-color-secondary">Description:</span>
+                                <div class="uk-margin-small-top">
+                                    {{ lab.description }}
+                                </div>
+                            </section>
+                            <hr>
+                            <section>
+                                <span class="sc-color-secondary">Notes:</span><br>
+                                <ul class="uk-comment-list uk-margin-small-top">
+                                    <li>
+                                        <article class="uk-comment uk-visible-toggle" tabindex="-1">
+                                            <div class="uk-comment-body">
+                                                <p>{{ lab.notes }}</p>
+                                            </div>
+                                        </article>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="uk-width-1-4@l">
+                            <span class="sc-color-secondary">Details</span>
+                            <ul class="uk-list uk-list-divider uk-margin-small-top">
+                                <li class="list-group">
+                                    <div class="sc-list-addon">
+                                        <i class="mdi mdi-information-outline"></i>
+                                    </div>
+                                    <div class="sc-list-body">
+                                        <div>
+                                            <span class="sc-color-secondary uk-margin-small-right">Status:</span>
+                                            <span class="uk-label uk-label-outline">{{ lab.state }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="sc-list-group">
+                                    <div class="sc-list-addon">
+                                        <i class="mdi mdi-star-outline"></i>
+                                    </div>
+                                    <div class="sc-list-body">
+                                        <div>
+                                            <span class="sc-color-secondary uk-margin-small-right">Priority:</span>
+                                            <span class="uk-label uk-label-danger">Blocker</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="sc-list-group">
+                                    <!--<div class="sc-list-addon">
+                                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; display: inline-block; max-width: 32px; max-height: 32px;"
+                                             alt="vkeeling"></div>-->
+                                    <div class="sc-list-body">
+                                        <span class="sc-text-semibold">{{ lab.sponsor }}</span>
+                                        <br />
+                                        <span class="sc-color-secondary">Sponsor</span>
+                                    </div>
+                                </li>
+                                <li class="sc-list-group">
+                                    <div class="sc-list-addon">
+                                        <i class="mdi mdi-clock-outline"></i>
+                                    </div>
+                                    <div class="sc-list-body">
+                                        19 Aug 2019
+                                        <span class="sc-color-secondary">Created</span>
+                                    </div>
+                                </li>
+                                <li class="sc-list-group">
+                                    <div class="sc-list-addon">
+                                        <i class="mdi mdi-progress-clock"></i>
+                                    </div>
+                                    <div class="sc-list-body">
+                                        24 Aug 2019
+                                        <span class="sc-color-secondary">Modified</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <hr>
+                            <span class="sc-color-secondary">Time Tracking</span>
+                            <ul class="uk-list uk-margin-small-top">
+                                <li>
+                                    <div class="sc-padding-top uk-width-1-1">
+                                        <div class="sc-progress sc-progress-medium">
+                                            <span class="sc-progress-label uk-text-left">Estimated: 4d</span>
+                                            <div class="sc-progress-bar md-bg-light-green-600"
+                                                 style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sc-padding-top uk-width-1-1">
+                                        <div class="sc-progress sc-progress-medium">
+                                            <span class="sc-progress-label uk-text-left">Logged: 4d</span>
+                                            <div class="sc-progress-bar md-bg-orange-800" style="width: 25%"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+
+    </div> <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+{% endblock %}
+{% block r_sidebar %}
+    {% include 'partials/rightsidebar.html' %}
+{% endblock %}
+{% block footer %}
+    {% include 'partials/footer.html' %}
+{% endblock %}
+{% block javascript %}
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
+
+    <!-- Sweet Alert 2 -->
+    <script src="{% static 'libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+
+
+{% endblock %}

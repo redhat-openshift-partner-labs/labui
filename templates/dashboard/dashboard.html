@@ -1,0 +1,109 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block css%}
+{% include 'partials/css.html' %}
+{% endblock %}
+{% block extra_css %}
+
+<link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<!-- Responsive datatable examples -->
+<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block contents %}
+<div class="checkout-tabs">
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-gen-ques-tab" data-bs-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
+                    <i class= "bx bx-question-mark d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="fw-bold mb-4">General</p>
+                </a>
+                <a class="nav-link" id="v-pills-privacy-tab" data-bs-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
+                    <i class= "bx bx-check-shield d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="fw-bold mb-4">OpenShift</p>
+                </a>
+                <a class="nav-link" id="v-pills-support-tab" data-bs-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                    <i class= "bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="fw-bold mb-4">Support</p>
+                </a>
+                <a class="nav-link" id="v-pills-submit-faq-tab" data-bs-toggle="pill" href="#v-pills-sumit-faq" role="tab" aria-controls="v-pills-submit-faq" aria-selected="false">
+                    <i class="bx d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="fw-bold mb-4">Submit FAQ</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                            {% for faq in faqs %}
+                                {% if faq.category == 'general' %}
+                            <div class="faq-box media mb-4">
+                                <div class="faq-icon me-3">
+                                    <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="font-size-15">{{ faq.question }}</h5>
+                                    <p class="text-muted">{{ faq.answer }}</p>
+                                </div>
+                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab">
+                            {% for faq in faqs %}
+                                {% if faq.category == 'openshift' %}
+                            <div class="faq-box media mb-4">
+                                <div class="faq-icon me-3">
+                                    <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="font-size-15">{{ faq.question }}</h5>
+                                    <p class="text-muted">{{ faq.answer }}</p>
+                                </div>
+                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                            {% for faq in faqs %}
+                                {% if faq.category == 'support' %}
+                            <div class="faq-box media mb-4">
+                                <div class="faq-icon me-3">
+                                    <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="font-size-15">{{ faq.question }}</h5>
+                                    <p class="text-muted">{{ faq.answer }}</p>
+                                </div>
+                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+</div> <!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+{% endblock %}
+
+{% block javascript %}
+<!-- JAVASCRIPT -->
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
+
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

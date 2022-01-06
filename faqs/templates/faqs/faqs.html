@@ -1,0 +1,94 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block css%}
+{% include 'partials/css.html' %}
+{% endblock %}
+{% block extra_css %}
+<link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+<!-- Responsive datatable examples -->
+<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" /> 
+{% endblock %}
+{% block contents %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">FAQs</h4>
+                <p class="card-title-desc">Administrator privileges are required to manage FAQs.</p>
+
+                <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                    {% for faq in faqs %}
+                      <tr>
+                          <td>{{ faq.id }}</td>
+                          <td>{{ faq.question }}</td>
+                          <td>{{ faq.answer }}</td>
+                          <td>
+                              <a href="{{ faq.id }}?submit" class="bx bx-subdirectory-right font-size-18"></a>
+                              <a href="{{ faq.id }}?view" class="bx bx-show font-size-18"></a>
+                              <a href="{{ faq.id }}?delete" class="bx bx-x-circle font-size-18"></a>
+                          </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+</div> <!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+{% endblock %}
+{% block r_sidebar %}
+{% include 'partials/rightsidebar.html' %}
+{% endblock %}
+{% block footer %}
+{% include 'partials/footer.html' %}
+{% endblock %}
+{% block javascript %}
+<!-- JAVASCRIPT -->
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
+
+<!-- Required datatable js -->
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<!-- Buttons examples -->
+<script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'libs/jszip/dist/jszip.min.js' %}"></script>
+<script src="{% static 'libs/pdfmake/build/pdfmake.min.js' %}"></script>
+<script src="{% static 'libs/pdfmake/build/vfs_fonts.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>
+
+<!-- Responsive examples -->
+<script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+
+<!-- Datatable init js -->
+<script src="{% static 'js/pages/datatables.init.js' %}"></script>
+
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

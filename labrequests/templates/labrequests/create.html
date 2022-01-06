@@ -1,0 +1,446 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block css %}
+    {% include 'partials/css.html' %}
+{% endblock %}
+{% block extra_css %}
+    <link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'libs/spectrum-colorpicker2/dist/spectrum.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}" rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="{% static 'libs/@chenfengyuan/datepicker/dist/datepicker.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libs/toastr/build/toastr.min.css' %}">
+{% endblock %}
+{% block contents %}
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="requestform" action="submit/" method="post">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        <div id="labrequest">
+
+                            <h3>Overview</h3>
+                            <section>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="project_name">{{ form.project_name.label }}</label>
+                                            <input type="text" class="form-control" id="projectname" name="project_name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="company_name">{{ form.company_name.label }}</label>
+                                            <input type="text" class="form-control" id="company_name" name="company_name">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <input type="hidden" id="request_type" name="request_type">
+                                    <div>
+                                        <label>{{ form.request_type.label }}</label>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="card card-body">
+                                            <p class="card-text" style="height: 100px">Requests that do not require
+                                                direct engineering support.
+                                                You will most likely be making this type of request.</p>
+                                            <a href="#" class="btn btn-primary waves-effect waves-light"
+                                               id="generaltype">General</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2"></div>
+                                    <div class="col-lg-4 ">
+                                        <div class="card card-body">
+                                            <p class="card-text" style="height: 100px">Direct engineering support or
+                                                exotic
+                                                customizations. You must provide clear/specific details.</p>
+                                            <a href="#" class="btn btn-primary waves-effect waves-light"
+                                               id="engineeringtype">Engineering</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2"></div>
+                                </div>
+                            </section>
+
+                            <h3>Contacts</h3>
+                            <section>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="sponsor">{{ form.sponsor.label }}</label>
+                                            {% if user.is_superuser %}
+                                                <input type="text" class="form-control" id="sponsor"
+                                                       value="{{ user.email }}" name="sponsor">
+                                            {% else %}
+                                                <input type="text" class="form-control" id="sponsor"
+                                                       value="{{ user.email }}" name="sponsor" readonly>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <label class="mb-3 mt-3">Primary Contact</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="primary_first_name">{{ form.primary_first_name.label }}</label>
+                                            <input type="text" class="form-control" id="primary_first_name" name="primary_first_name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="primary_last_name">{{ form.primary_last_name.label }}</label>
+                                            <input type="text" class="form-control" id="primary_last_name" name="primary_last_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="primary_email_address">{{ form.primary_email_address.label }}</label>
+                                            <input class="form-control input-mask" id="primary_email_address" name="primary_email_address"
+                                                   data-inputmask="'alias': 'email'" im-insert="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="primary_phone_number">{{ form.primary_phone_number.label }}</label>
+                                            <input type="number" class="form-control" id="primary_phone_number"
+                                                   name="primary_phone_number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div>
+                                        <label class="mb-3 mt-3">Secondary Contact</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="secondary_first_name">{{ form.secondary_first_name.label }}</label>
+                                            <input type="text" class="form-control" id="secondary_first_name" name="secondary_first_name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="secondary_last_name">{{ form.secondary_last_name.label }}</label>
+                                            <input type="text" class="form-control" id="secondary_last_name" name="secondary_last_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="secondary_email_address">{{ form.secondary_email_address.label }}</label>
+                                            <input class="form-control input-mask" id="secondary_email_address" name="secondary_email_address"
+                                                   data-inputmask="'alias': 'email'" im-insert="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="secondary_phone_number">{{ form.secondary_phone_number.label }}</label>
+                                            <input type="number" class="form-control" id="secondary_phone_number"
+                                                   name="secondary_phone_number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <h3>Details</h3>
+                            <section>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label for="description">{{ form.description.label }}</label>
+                                                <textarea class="form-control" maxlength="250" rows="7"
+                                                          id="description" name="description"
+                                                          placeholder="Provide specific details regarding your request to assist with approval."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label for="notes">{{ form.notes.label }}</label>
+                                                <textarea class="form-control" maxlength="250" rows="7"
+                                                          id="notes" name="notes"
+                                                          placeholder="Provide additional details or questions that may or may not affect request approval."></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+
+                            <h3>Cluster</h3>
+                            <section>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="cluster_name">{{ form.cluster_name.label }}</label>
+                                                <input type="text" class="form-control" id="cluster_name"
+                                                       name="cluster_name" maxlength="12">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="cluster_size">{{ form.cluster_size.label }}</label>
+                                                <select class="form-select" id="cluster_size" name="cluster_size">
+                                                    {% for value, label in form.cluster_size.field.choices %}
+                                                        <option value="{{ value }}">{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label>{{ form.openshift_version.label }}</label>
+                                                <select class="form-select" id="openshift_version"
+                                                        name="openshift_version">
+                                                    {% for version, value in versions %}
+                                                        <option value="{{ value }}">{{ version }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="mb-3">
+                                                <label>{{ form.reservation_time.label }}</label>
+                                                <select class="form-select" id="reservation_time" name="reservation_time">
+                                                    {% for value, label in form.reservation_time.field.choices %}
+                                                        <option value="{{ value }}">{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="mb-3">
+                                                <label>{{ form.start_date.label }}</label>
+                                                <div class="input-group" id="startdatepicker">
+                                                    <input type="text" name="start_date" id="start_date"
+                                                           class="form-control"
+                                                           data-date-format="dd M, yyyy"
+                                                           data-date-container="#startdatepicker"
+                                                           data-provide="datepicker">
+                                                    <span class="input-group-text">
+                                                    <i class="mdi mdi-calendar"></i>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="mb-3">
+                                                <label>{{ form.timezone.label }}</label>
+                                                <select class="form-select" id="timezone" name="timezone">
+                                                    {% for value, label in form.timezone.field.choices %}
+                                                        <option value="{{ value }}">{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 align-self-end">
+                                            <div class="form-check form-switch mb-4">
+                                                <input class="form-check-input" type="checkbox" id="extend_time">
+                                                <label class="form-check-label ms-1" for="extend_time">{{ form.extend_time.label }}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label>{{ form.cloud_provider.label }}</label>
+                                                <select class="form-select" id="cloud_provider" name="cloud_provider">
+                                                    {% for value, label in form.cloud_provider.field.choices %}
+                                                        <option value="{{ value }}">{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!-- Confirm Details -->
+                            <h3>Confirm</h3>
+                            <section>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-6">
+                                        <div class="text-center">
+                                            <div class="mb-4">
+                                                <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+                                            </div>
+                                            <div>
+                                                <h5>Ready to Submit</h5>
+                                                <p class="text-muted">Be sure your request is valid before
+                                                    submitting.<br/>You can save also allowing you to submit or delete
+                                                    later.</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3"></div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-6">
+                                        <div class="text-center">
+                                            <input class="btn btn-primary" type="submit" value="Submit"/>
+                                            <input class="btn btn-secondary" type="submit" id="hold" value="{{ form.hold.label }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3"></div>
+                                </div>
+                            </section>
+                        </div>
+
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <input type="hidden" name="state" id="state" value="pending"/>
+            </form>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+    <!-- End Page-content -->
+{% endblock %}
+{% block footer %}
+    {% include 'partials/footer.html' %}
+{% endblock %}
+{% block javascript %}
+    <!-- JAVASCRIPT -->
+    <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
+    <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+    <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
+
+    <!-- jquery step -->
+    <script src="{% static 'libs/jquery-steps/build/jquery.steps.min.js' %}"></script>
+
+    <!-- form mask -->
+    <script src="{% static 'libs/inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
+
+    <script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'libs/spectrum-colorpicker2/dist/spectrum.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-maxlength/dist/bootstrap-maxlength.min.js' %}"></script>
+    <script src="{% static 'libs/@chenfengyuan/datepicker/dist/datepicker.min.js' %}"></script>
+
+    <script src="{% static 'libs/parsleyjs/parsley.min.js' %}"></script>
+
+    <script src="{% static 'libs/jquery.serializejson/jquery.serializejson.min.js' %}"></script>
+
+    <!-- Luxon time library-->
+    <script src="{% static 'libs/luxon/luxon.min.js' %}"></script>
+
+    <!-- toastr plugin -->
+    <script src="{% static 'libs/toastr/toastr.js' %}"></script>
+
+    <!-- toastr init -->
+    <script src="{% static 'js/pages/toastr.init.js' %}"></script>
+
+    <script src="{% static 'js/pages/form-validation.init.js' %}"></script>
+
+    <!-- form mask init -->
+    <script src="{% static 'js/pages/form-mask.init.js' %}"></script>
+
+    <!-- form advanced init -->
+    <script src="{% static 'js/pages/form-advanced.init.js' %}"></script>
+
+    <!-- form wizard init -->
+    <script src="{% static 'js/pages/form-wizard.init.js' %}"></script>
+
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <script>
+        $(document).ready(
+            function submissionStatus() {
+                let message = "{{ message|default:"'empty'" }}"
+                if (message == 'Request Submitted') {
+                    toastr.success(message)
+                } else if (message == 'Request Failed; Try Again') {
+                    toastr.error(message)
+                }
+            }
+        )
+        $(document).ready(
+            function setRequestType() {
+                /*toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": true,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }*/
+
+                $("#generaltype").on("click", function (event) {
+                    event.preventDefault();
+                    $("#request_type").val("general");
+                    toastr.success("Request type set to General")
+                });
+
+                $("#engineeringtype").on("click", function (event) {
+                    event.preventDefault();
+                    $("#request_type").val("engineering");
+                    toastr.success("Request type set to Engineering")
+                });
+
+                $("#demotype").on("click", function (event) {
+                    event.preventDefault();
+                    $("#request_type").val("demo");
+                    toastr.success("Request type set to Demo")
+                });
+            }
+        )
+    </script>
+{% endblock %}

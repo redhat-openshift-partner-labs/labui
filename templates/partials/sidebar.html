@@ -1,0 +1,56 @@
+{% load static %} {% block sidebar %}
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="vertical-menu">
+      <div data-simplebar class="h-100">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+          <!-- Left Menu Start -->
+          <ul class="metismenu list-unstyled" id="side-menu">
+
+        <li>
+            <a href="{% url 'dashboard' %}" class="waves-effect">
+                <i class="bx bx-file"></i>
+                <span key="t-faqs">FAQs</span>
+            </a>
+        </li>
+
+        <li class="menu-title" key="t-requests">Requests</li>
+
+        <li>
+          <a href="{% url 'requests-create' %}" class="waves-effect">
+            <i class="bx bx-file"></i>
+            <span key="t-create">Create</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{% url 'requests-view' %}" class="waves-effect">
+            <i class="bx bx-list-ul"></i>
+            <span key="t-view">View</span>
+          </a>
+        </li>
+
+        <!--<li>
+          <a href="{% url 'requests-manage' %}" class="waves-effect">
+            <i class="bx bx-user-circle"></i>
+            <span key="t-manage">Manage</span>
+          </a>
+        </li>-->
+
+        <!--<li class="menu-title" key="t-documentation">Documentation</li>-->
+
+        <!--<li>
+          <a href="javascript: void(0);" class="waves-effect">
+            <i class="bx bx-user-circle"></i>
+            <span key="t-authentication">Authentication</span>
+          </a>
+        </li>-->
+
+
+        </ul>
+        </div>
+        <!-- Sidebar -->
+      </div>
+    </div>
+    <!-- Left Sidebar End -->
+{% endblock %}

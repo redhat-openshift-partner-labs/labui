@@ -1,0 +1,7 @@
+.idea
+.theme
+node_modules
+.env
+db.sqlite3
+assets
+static
