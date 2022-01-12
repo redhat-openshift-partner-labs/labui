@@ -29,6 +29,8 @@ urlpatterns = [
     path('layout/', include('layout.urls')),
     # LabRequests
     path('requests/', include('labrequests.urls')),
+    # Sponsor Picture
+    path('sponsor/<email>/', views.get_sponsor_picture, name='get-sponsor-picture'),
 
     # Allauth
     path('account/', include('allauth.urls')),

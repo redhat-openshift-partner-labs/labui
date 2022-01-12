@@ -1,17 +1,22 @@
-from django.http import request
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView
 from allauth.account.views import PasswordSetView, PasswordChangeView
 from django.urls import reverse_lazy
+from django.http import HttpResponse
+from allauth.socialaccount.models import SocialAccount
 
 
-# utillity
+def get_sponsor_picture(req, email):
+    user = SocialAccount.objects.get(extra_data__contains='"email": "{}"'.format(email)).get_avatar_url()
+    return HttpResponse(user)
+
+
+# utility
 class DashboardView(LoginRequiredMixin, View):
-    def get(self, request):
+    def get(self, req):
         greeting = {'heading': "FAQs", 'pageview': "Home"}
-        return render(request, 'dashboard/dashboard.html', greeting)
+        return render(req, 'dashboard/dashboard.html', greeting)
 
 
 class MyPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
