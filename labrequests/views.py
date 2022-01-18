@@ -68,11 +68,9 @@ def create_request(req):
     payload = json.dumps(formdata)
     url = "http://localhost:3000/requests"
 
-    for i in range(5):
-        time.sleep(5)
-        res = requests.post(url, payload, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
-        if res.status_code == 200:
-            return redirect('requests-create')
+    res = requests.post(url, payload, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+    if res.status_code == 200:
+        return redirect('requests-create')
 
     return redirect('requests-create')
 
