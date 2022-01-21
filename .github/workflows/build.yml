@@ -1,0 +1,42 @@
+name: build-and-push
+on:
+  push:
+env:
+  REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+  IMAGE_REGISTRY: quay.io
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+
+jobs:
+  build:
+    name: Build and Push Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Build image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: oplui
+          containerfiles: |
+            ./Containerfile
+
+      - name: Login to registry
+        id: registry-login
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Push image
+        id: push-image
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/opdev
+
+      - name: Print image URL
+        run: echo "image pushed to ${{ steps.push-image.outputs.registry-paths }}"
