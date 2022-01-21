@@ -1,5 +1,7 @@
 import time
 
+from allauth.socialaccount.models import SocialAccount
+from django.shortcuts import render
 import requests
 import jq
 import re
@@ -7,8 +9,40 @@ from decouple import config
 from distutils.version import StrictVersion
 
 
+def send_email(req, mail_type, cluster_id):
+    url = 'http://localhost:3000/emails/' + mail_type + '/' + cluster_id
+    res = requests.post(url, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+    lab = {}
+    if res.status_code == 200:
+        lab = get_lab(cluster_id)
+
+        # noinspection PyBroadException
+        try:
+            lab["picture"] = SocialAccount.objects.get(
+                extra_data__contains='"email": "{}"'.format(lab["sponsor"])).get_avatar_url()
+        except SocialAccount.DoesNotExist:
+            lab["picture"] = "https://via.placeholder.com/96?text="
+
+        return render(req, 'labrequests/single.html',
+                      {
+                          'lab': lab,
+                          'heading': 'View',
+                          'pageview': 'Request',
+                          'message': mail_type + ' sent successfully.'
+                      })
+
+    return render(req, 'labrequests/single.html',
+                  {
+                      'lab': lab,
+                      'heading': 'View',
+                      'pageview': 'Request',
+                      'message': 'Error sending email'
+                  })
+
+
 def get_openshift_versions():
-    payload = requests.get("https://quay.io/api/v1/repository/openshift-release-dev/ocp-release?includeTags=true").json()
+    payload = requests.get(
+        "https://quay.io/api/v1/repository/openshift-release-dev/ocp-release?includeTags=true").json()
     versions = jq.compile(".tags|with_entries(select(.key|match(\"x86_64\")))|keys").input(payload).first()
     pattern = ".*(hotfix|assembly|art|fc|rc).*"
     images = []

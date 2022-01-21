@@ -81,7 +81,13 @@ class CreateRequestView(LoginRequiredMixin, View):
         if req.user.is_authenticated:
             openshift_versions = get_openshift_versions()
         form = LabRequestsForm()
-        return render(req, 'labrequests/create.html', {'form': form, 'versions': openshift_versions, 'heading': 'Create', 'pageview': 'Requests'})
+        return render(req, 'labrequests/create.html',
+                      {
+                          'form': form,
+                          'versions': openshift_versions,
+                          'heading': 'Create',
+                          'pageview': 'Requests'
+                      })
 
 
 class ViewRequestsView(LoginRequiredMixin, View):
@@ -98,7 +104,8 @@ class ViewSingleRequestView(LoginRequiredMixin, View):
 
         # noinspection PyBroadException
         try:
-            lab["picture"] = SocialAccount.objects.get(extra_data__contains='"email": "{}"'.format(lab["sponsor"])).get_avatar_url()
+            lab["picture"] = SocialAccount.objects.get(
+                extra_data__contains='"email": "{}"'.format(lab["sponsor"])).get_avatar_url()
         except SocialAccount.DoesNotExist:
             lab["picture"] = "https://via.placeholder.com/96?text="
 

@@ -1,5 +1,5 @@
-from django.urls import path
-from labrequests import views
+from django.urls import path, re_path
+from labrequests import views, services
 
 urlpatterns = [
     # Requests View
@@ -11,4 +11,7 @@ urlpatterns = [
     path('approve/<cluster_id>/', views.ViewSingleRequestView.as_view(), name='approve-request'),
     path('manage/<cluster_id>/', views.ManageSingleRequestView.as_view(), name='manage-single-request'),
     path('create/submit/', views.create_request),
+
+    # Email URLs
+    path('email/<str:mail_type>/<str:cluster_id>/', services.send_email, name='send-email')
 ]

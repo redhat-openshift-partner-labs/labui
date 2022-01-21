@@ -39,6 +39,21 @@
                                         Approve
                                     </button>
                                 {% endif %}
+                                {% if user.is_superuser %}
+                                    <div class="btn-group-vertical" role="group" aria-label="button group">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupVerticalDrop1" type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Send Mail <i class="mdi mdi-chevron-down"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                                <a class="dropdown-item" href="{% url 'send-email' mail_type='welcome' cluster_id=lab.cluster_id %}">Welcome</a>
+                                                <a class="dropdown-item" href="{% url 'send-email' mail_type='credentials' cluster_id=lab.cluster_id %}">Credentials</a>
+                                                <a class="dropdown-item" href="{% url 'send-email' mail_type='kubeadmin' cluster_id=lab.cluster_id %}">KubeAdmin</a>
+                                                <a class="dropdown-item" href="{% url 'send-email' mail_type='kubeconfig' cluster_id=lab.cluster_id %}">KubeConfig</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <hr>
                             <section>
