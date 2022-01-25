@@ -38,5 +38,21 @@ jobs:
           tags: ${{ steps.build-image.outputs.tags }}
           registry: quay.io/opdev
 
+      - name: Update Deployment
+        id: update-deployment
+        uses: redhat-actions/oc-login@v1
+        with:
+          insecure_skip_tls_verify: true
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          openshift_token: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+
+      - name: Patch deployment
+        id: patch-deployment
+        env:
+          IMAGE_DIGEST: ${{ steps.push-image.outputs.digest }}
+        run: |
+          oc patch deployment ui -p '{"spec":{"template":{"spec":{"containers":[{"name":"ui","image":"quay.io/opdev/oplui@'${IMAGE_DIGEST}'"}]}}}}'
+
       - name: Print image URL
-        run: echo "image pushed to ${{ steps.push-image.outputs.registry-paths }}"
+        run: echo "Built, pushed, and deployed successfully."
