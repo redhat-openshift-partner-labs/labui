@@ -102,6 +102,10 @@ class ViewSingleRequestView(LoginRequiredMixin, View):
         if req.user.is_authenticated:
             lab = get_lab(cluster_id)
 
+        if req.user.email != lab["sponsor"] and not req.user.is_superuser:
+            labs = get_labs(req.user.is_superuser, req.user.email)
+            return render(req, 'labrequests/view.html', {'labs': labs, 'heading': 'View', 'pageview': 'Requests', 'message': 'Unauthorized'})
+
         # noinspection PyBroadException
         try:
             lab["picture"] = SocialAccount.objects.get(
@@ -123,4 +127,9 @@ class ManageSingleRequestView(LoginRequiredMixin, View):
     def get(self, req, cluster_id):
         if req.user.is_authenticated:
             lab = get_lab(req.user.is_superuser, req.user.email, cluster_id)
+            
+        if req.user.email != lab["sponsor"] and not req.user.is_superuser:
+            labs = get_labs(req.user.is_superuser, req.user.email)
+            return render(req, 'labrequests/view.html', {'labs': labs, 'heading': 'View', 'pageview': 'Requests', 'message': 'Unauthorized'})
+
         return render(req, 'labrequests/single.html', {'lab': lab, 'heading': 'Manage', 'pageview': 'Request'})
