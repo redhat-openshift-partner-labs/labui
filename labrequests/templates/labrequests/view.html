@@ -97,4 +97,11 @@
     <script src="{% static 'js/pages/datatables.init.js' %}"></script>
 
     <script src="{% static 'js/app.js' %}"></script>
+
+    <script>
+      $(document).ready(function() {
+          let message = "{{ message|default:"'empty'" }}"
+          toastr.success(message)
+      })
+    </script>
 {% endblock %}

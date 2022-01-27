@@ -110,3 +110,13 @@ def get_lab(cluster_id):
             lab = res.json()
             break
     return lab
+
+
+def update_request_state(state, cluster_id):
+    url = 'http://localhost:3000/requests/' + state + "/" + cluster_id
+    msg = {}
+
+    res = requests.put(url, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+    msg = res.json()
+
+    return msg

@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'libs/toastr/build/toastr.min.css' %}">
 {% endblock %}
 {% block contents %}
+    {{ message|json_script:"msg" }}
     <div class="row">
         <div class="col-lg-12">
             <form id="requestform" action="submit/" method="post">
@@ -30,13 +31,13 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="project_name">{{ form.project_name.label }}</label>
+                                            <label for="project_name">{{ form.project_name.label }}</label><span style="color:red">*</span>
                                             <input type="text" class="form-control" id="projectname" name="project_name">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="company_name">{{ form.company_name.label }}</label>
+                                            <label for="company_name">{{ form.company_name.label }}</label><span style="color:red">*</span>
                                             <input type="text" class="form-control" id="company_name" name="company_name">
                                         </div>
                                     </div>
@@ -75,7 +76,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="sponsor">{{ form.sponsor.label }}</label>
+                                            <label for="sponsor">{{ form.sponsor.label }}</label><span style="color:red">*</span>
                                             {% if user.is_superuser %}
                                                 <input type="text" class="form-control" id="sponsor"
                                                        value="{{ user.email }}" name="sponsor">
@@ -94,7 +95,7 @@
                                 </div>
                                 <div class="row">
                                     <div>
-                                        <label class="mb-3 mt-3">Primary Contact</label>
+                                        <label class="mb-3 mt-3">Primary Contact</label><span style="color:red">*</span>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -171,7 +172,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="mb-3">
-                                                <label for="description">{{ form.description.label }}</label>
+                                                <label for="description">{{ form.description.label }}</label><span style="color:red">*</span>
                                                 <textarea class="form-control" maxlength="250" rows="7"
                                                           id="description" name="description"
                                                           placeholder="Provide specific details regarding your request to assist with approval."></textarea>
@@ -209,7 +210,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="cluster_name">{{ form.cluster_name.label }}</label>
+                                                <label for="cluster_name">{{ form.cluster_name.label }}</label><span style="color:red">*</span>
                                                 <input type="text" class="form-control" id="cluster_name"
                                                        name="cluster_name" maxlength="12">
                                             </div>
@@ -250,7 +251,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                                                <label>{{ form.start_date.label }}</label>
+                                                <label>{{ form.start_date.label }}</label><span style="color:red">*</span>
                                                 <div class="input-group" id="startdatepicker">
                                                     <input type="text" name="start_date" id="start_date"
                                                            class="form-control"
@@ -394,35 +395,25 @@
 
     <script>
         $(document).ready(
-            function submissionStatus() {
-                let message = "{{ message|default:"'empty'" }}"
-                if (message == 'Request Submitted') {
-                    toastr.success(message)
-                } else if (message == 'Request Failed; Try Again') {
-                    toastr.error(message)
+            function() {
+                const msg = JSON.parse(document.getElementById('msg').textContent)
+
+                if (msg.message === undefined) {
+                    return
+                }
+
+                if (msg.message === 'Request Submitted') {
+                    toastr.success(msg.message)
+                } else {
+                    for(const m of msg.message) {
+                        toastr.error(m)
+                    }
                 }
             }
         )
+
         $(document).ready(
             function setRequestType() {
-                /*toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": true,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }*/
-
                 $("#generaltype").on("click", function (event) {
                     event.preventDefault();
                     $("#request_type").val("general");

@@ -58,35 +58,59 @@ def create_request(req):
     match formdata["reservation_time"]:
         case "1d":
             formdata["end_date"] = datetime.strftime(date + timedelta(days=1), timefmt)
+            formdata["adjusted_end_date"] = datetime.strftime(date + timedelta(days=1), timefmt)
         case "1w":
             formdata["end_date"] = datetime.strftime(date + timedelta(days=7), timefmt)
+            formdata["adjusted_end_date"] = datetime.strftime(date + timedelta(days=7), timefmt)
         case "2w":
             formdata["end_date"] = datetime.strftime(date + timedelta(days=14), timefmt)
+            formdata["adjusted_end_date"] = datetime.strftime(date + timedelta(days=14), timefmt)
         case "1m":
             formdata["end_date"] = datetime.strftime(date + timedelta(days=30), timefmt)
+            formdata["adjusted_end_date"] = datetime.strftime(date + timedelta(days=30), timefmt)
 
     payload = json.dumps(formdata)
     url = "http://localhost:3000/requests"
 
     res = requests.post(url, payload, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
-    if res.status_code == 200:
-        return redirect('requests-create')
+    message = res.json()
 
-    return redirect('requests-create')
+    if res.status_code != 200:
+        openshift_versions = get_openshift_versions()
+        form = LabRequestsForm()
+        return render(req, 'labrequests/create.html',
+                      {
+                          'form': form,
+                          'versions': openshift_versions,
+                          'message': message,
+                          'heading': 'Create',
+                          'pageview': 'Requests',
+                      })
+
+    openshift_versions = get_openshift_versions()
+    form = LabRequestsForm()
+    return render(req, 'labrequests/create.html',
+                  {
+                      'form': form,
+                      'versions': openshift_versions,
+                      'message': message,
+                      'heading': 'Create',
+                      'pageview': 'Requests',
+                  })
 
 
 # utility
 class CreateRequestView(LoginRequiredMixin, View):
     def get(self, req):
-        if req.user.is_authenticated:
-            openshift_versions = get_openshift_versions()
+        #if not req.user.is_authenticated:
+        openshift_versions = get_openshift_versions()
         form = LabRequestsForm()
         return render(req, 'labrequests/create.html',
                       {
                           'form': form,
                           'versions': openshift_versions,
                           'heading': 'Create',
-                          'pageview': 'Requests'
+                          'pageview': 'Requests',
                       })
 
 
@@ -102,7 +126,7 @@ class ViewSingleRequestView(LoginRequiredMixin, View):
         if req.user.is_authenticated:
             lab = get_lab(cluster_id)
 
-        if req.user.email != lab["sponsor"] and not req.user.is_superuser:
+        if (req.user.email != lab["sponsor"]) and (not req.user.is_superuser):
             labs = get_labs(req.user.is_superuser, req.user.email)
             return render(req, 'labrequests/view.html', {'labs': labs, 'heading': 'View', 'pageview': 'Requests', 'message': 'Unauthorized'})
 
