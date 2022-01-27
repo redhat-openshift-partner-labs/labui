@@ -1,6 +1,5 @@
 name: build-and-push
-on:
-  push:
+on: [push,workflow_dispatch]
 env:
   REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
   IMAGE_REGISTRY: quay.io
