@@ -39,7 +39,7 @@
                                         Approve
                                     </button>
                                 {% endif %}
-                                {% if user.is_superuser %}
+                                {% if user.is_superuser and lab.state == "active" %}
                                     <div class="btn-group-vertical" role="group" aria-label="button group">
                                         <div class="btn-group" role="group">
                                             <button id="btnGroupVerticalDrop1" type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

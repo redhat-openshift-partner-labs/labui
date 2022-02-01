@@ -114,6 +114,50 @@ class CreateRequestView(LoginRequiredMixin, View):
                       })
 
 
+class ApprovedRequestView(LoginRequiredMixin, View):
+    def get(self, req, cluster_id):
+        if req.user.is_superuser:
+            url = 'http://localhost:3000/requests/approved/' + cluster_id
+            res = requests.post(url, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+            msg = res.json()
+
+            print(msg)
+            lab = get_lab(cluster_id)
+
+            # noinspection PyBroadException
+            try:
+                lab["picture"] = SocialAccount.objects.get(
+                    extra_data__contains='"email": "{}"'.format(lab["sponsor"])).get_avatar_url()
+            except SocialAccount.DoesNotExist:
+                lab["picture"] = "https://via.placeholder.com/96?text="
+
+            return render(req, 'labrequests/single.html', {'lab': lab, 'heading': 'View', 'pageview': 'Request', 'message': msg})
+
+        return redirect('requests-view')
+
+
+class DeniedRequestView(LoginRequiredMixin, View):
+    def get(self, req, cluster_id):
+        if req.user.is_superuser:
+            url = 'http://localhost:3000/requests/denied/' + cluster_id
+            res = requests.post(url, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+            msg = res.json()
+
+            print(msg)
+            lab = get_lab(cluster_id)
+
+            # noinspection PyBroadException
+            try:
+                lab["picture"] = SocialAccount.objects.get(
+                    extra_data__contains='"email": "{}"'.format(lab["sponsor"])).get_avatar_url()
+            except SocialAccount.DoesNotExist:
+                lab["picture"] = "https://via.placeholder.com/96?text="
+
+            return render(req, 'labrequests/single.html', {'lab': lab, 'heading': 'View', 'pageview': 'Request', 'message': msg})
+
+        return redirect('requests-view')
+
+
 class ViewRequestsView(LoginRequiredMixin, View):
     def get(self, req):
         if req.user.is_authenticated:
