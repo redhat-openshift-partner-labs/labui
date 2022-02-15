@@ -44,7 +44,7 @@ def get_openshift_versions():
     payload = requests.get(
         "https://quay.io/api/v1/repository/openshift-release-dev/ocp-release?includeTags=true").json()
     versions = jq.compile(".tags|with_entries(select(.key|match(\"x86_64\")))|keys").input(payload).first()
-    pattern = ".*(hotfix|assembly|art|fc|rc).*"
+    pattern = ".*(hotfix|assembly|art|fc|rc|nightly).*"
     images = []
     selectable_versions = []
     filtered = [version for version in versions if not re.match(pattern, version)]

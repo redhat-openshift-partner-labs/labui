@@ -156,6 +156,20 @@ class DeniedRequestView(LoginRequiredMixin, View):
             return render(req, 'labrequests/single.html', {'lab': lab, 'heading': 'View', 'pageview': 'Request', 'message': msg})
 
         return redirect('requests-view')
+    
+
+class DeleteRequestView(LoginRequiredMixin, View):
+    def get(self, req, cluster_id):
+        if req.user.is_superuser:
+            url = 'http://localhost:3000/requests/deleted/' + cluster_id
+            res = requests.post(url, headers={'Authorization': 'Bearer %s' % config('ACCESS_TOKEN')})
+            msg = res.json()
+
+            labs = get_labs(req.user.is_superuser, req.user.email)
+            return render(req, 'labrequests/view.html',
+                          {'labs': labs, 'heading': 'View', 'pageview': 'Requests', 'message': msg})
+
+        return redirect('requests-view')
 
 
 class ViewRequestsView(LoginRequiredMixin, View):
