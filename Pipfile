@@ -11,6 +11,7 @@ django-allauth = "*"
 django-embed-video = "*"
 django-crispy-forms = "*"
 jq = "*"
+django-formtools = "*"
 
 [dev-packages]
 
