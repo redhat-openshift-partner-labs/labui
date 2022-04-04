@@ -8,7 +8,7 @@ class LabRequestsForm(forms.Form):
     cluster_id = forms.UUIDField()
     project_name = forms.CharField(max_length=12, label='Project Name')
     company_name = forms.CharField(max_length=12, label='Company Name')
-    request_type = forms.ChoiceField(choices=[('general', 'General'), ('engineering', 'Engineering')],
+    request_type = forms.ChoiceField(choices=[('general', 'General'), ('engineering', 'Engineering'), ('nvidia', 'Nvidia')],
                                      label='Request Type')
     sponsor = forms.CharField(label='Sponsor')
     primary_first_name = forms.CharField(max_length=32, label='First Name')
