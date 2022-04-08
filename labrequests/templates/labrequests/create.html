@@ -68,6 +68,13 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-2"></div>
+                                    <div class="col-lg-4 ">
+                                        <div class="card card-body">
+                                            <p class="card-text" style="height: 100px">Nvidia support. Should only be selected for nvidia partner requests..</p>
+                                            <a href="#" class="btn btn-primary waves-effect waves-light"
+                                               id="nvidiatype">Nvidia</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </section>
 
@@ -430,6 +437,12 @@
                     event.preventDefault();
                     $("#request_type").val("demo");
                     toastr.success("Request type set to Demo")
+                });
+
+                $("#nvidiatype").on("click", function (event) {
+                    event.preventDefault();
+                    $("#request_type").val("nvidia");
+                    toastr.success("Request type set to Nvidia")
                 });
             }
         )
