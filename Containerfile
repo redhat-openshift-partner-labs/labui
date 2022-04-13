@@ -20,7 +20,7 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev libffi-dev \
     && apk add --no-cache mariadb-dev make
-RUN pip install -U pip
+#RUN pip install -U pip
 
 # Allows docker to cache installed dependencies between builds
 COPY requirements.txt /opt/app-root/src
